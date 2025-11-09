@@ -671,6 +671,8 @@ internal class Identification
                 return Model.B850S_PRO_WIFI6E;
             case var _ when name.Equals("PRO B850M-A WIFI (MS-7E66)", StringComparison.OrdinalIgnoreCase):
                 return Model.B850MA_PRO_WIFI;
+            case var _ when name.Equals("B850M GAMING PLUS WIFI (MS-7E66)", StringComparison.OrdinalIgnoreCase):
+                return Model.B850MA_PRO_WIFI;
             case var _ when name.Equals("PRO B850M-P WIFI (MS-7E71)", StringComparison.OrdinalIgnoreCase):
                 return Model.B850MP_PRO_WIFI;
             case var _ when name.Equals("B850 GAMING PLUS WIFI (MS-7E56)", StringComparison.OrdinalIgnoreCase):
