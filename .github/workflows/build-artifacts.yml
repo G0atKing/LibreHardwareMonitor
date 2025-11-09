@@ -1,0 +1,53 @@
+name: Build Artifacts
+
+on:
+  push:
+    branches: 
+      - copilot/add-support-for-b850m-board
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-2022
+    steps:
+      - uses: actions/checkout@v4
+      - uses: nuget/setup-nuget@v2
+      - uses: microsoft/setup-msbuild@v1.1
+        with:
+          msbuild-architecture: x64
+
+      - name: Restore application packages
+        run: dotnet restore LibreHardwareMonitor\LibreHardwareMonitor.csproj 
+
+      - name: Build application
+        run: dotnet build LibreHardwareMonitor\LibreHardwareMonitor.csproj -c Release --no-restore -p:Platform=x64
+
+      - name: Publish application
+        uses: actions/upload-artifact@v4
+        with:
+          name: LibreHardwareMonitor-net472
+          path: |
+            bin/Release/net472
+
+      - name: Restore library packages
+        run: dotnet restore LibreHardwareMonitorLib\LibreHardwareMonitorLib.csproj 
+
+      - name: Build x64 libraries
+        run: dotnet build LibreHardwareMonitorLib\LibreHardwareMonitorLib.csproj -c Release --no-restore -p:Platform=x64
+
+      - name: Publish x64 libraries
+        uses: actions/upload-artifact@v4
+        with:
+          name: LibreHardwareMonitorLib-x64
+          path: |
+            bin/Release/x64
+
+      - name: Build ARM64 libraries
+        run: dotnet build LibreHardwareMonitorLib\LibreHardwareMonitorLib.csproj -c Release --no-restore -p:Platform=ARM64
+
+      - name: Publish ARM64 libraries (includes .NET 8.0)
+        uses: actions/upload-artifact@v4
+        with:
+          name: LibreHardwareMonitorLib-ARM64
+          path: |
+            bin/Release/ARM64
